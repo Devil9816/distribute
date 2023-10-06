@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Channel Distribution Calculator</title>
+    <link rel="stylesheet" href="improve.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="container-left">
+            <h1>Channel Distribution </h1>
+            <div class="input-group">
+                <label for="amount">Enter Amount:</label>
+                <input type="text" id="amount" placeholder="Enter the amount">
+            </div>
+
+            <div class="input-group">
+                <label for="intent">Choose Intent:</label>
+                <select id="intent">
+                    <option value="">-- Select --</option>
+                    <option value="Branding">Branding</option>
+                    <option value="Sales Push">Sales Push</option>
+                    <option value="Awareness">Awareness</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="gender">Choose Gender:</label>
+                <select id="gender">
+                    <option value="">-- Select --</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="ageGroup">Choose Age Group:</label>
+                <select id="ageGroup">
+                    <option value="">-- Select --</option>
+                    <option value="<30">&lt;30</option>
+                    <option value=">30">&gt;30</option>
+                </select>
+            </div>
+
+            <button onclick="calculateDistribution()">Calculate Distribution</button>
+
+            <h2 class="result-heading"> Distribution</h2>
+            <div id="result" class="result"></div>
+
+
+        </div>
+
+        <div class="container-center">
+            <canvas id="pieChart" style="color: white;"></canvas>
+
+        </div>
+
+        <div class="container-right">
+            <canvas id="lineChart" style="color: white;" height="400"></canvas>
+        </div>
+    </div>
+
+    <script>
+        function calculateDistribution() {
+            const containerCenter = document.querySelector('.container-center');
+            const containerRight = document.querySelector('.container-right');
+            const resultHeading = document.querySelector('.result-heading');
+            const amount = parseFloat(document.getElementById('amount').value);
+            const intent = document.getElementById('intent').value;
+            const gender = document.getElementById('gender').value;
+            const ageGroup = document.getElementById('ageGroup').value;
+
+            const percentageDistribution = {
+                'Male': {
+                    '<30': { 'Branding': [20, 5, 55, 15, 5, 0], 'Sales Push': [15, 0, 55, 0, 10, 20], 'Awareness': [20, 10, 35, 20, 5, 10] },
+                    '>30': { 'Branding': [40, 5, 30, 20, 5, 0], 'Sales Push': [30, 5, 40, 0, 5, 20], 'Awareness': [30, 5, 30, 20, 5, 10] }
+                },
+                'Female': {
+                    '<30': { 'Branding': [20, 5, 55, 15, 5, 0], 'Sales Push': [15, 0, 55, 0, 10, 20], 'Awareness': [20, 10, 35, 20, 5, 10] },
+                    '>30': { 'Branding': [20, 5, 30, 30, 5, 10], 'Sales Push': [20, 5, 30, 20, 5, 20], 'Awareness': [20, 5, 30, 30, 5, 10] }
+                }
+            };
+
+            const distributionPercentages = percentageDistribution[gender][ageGroup][intent];
+            if (distributionPercentages) {
+                containerCenter.style.display = "block";
+                containerRight.style.display = "block";
+                resultHeading.style.display = "block";
+            }
+            const resultElement = document.getElementById('result');
+
+            resultElement.innerHTML = `
+            <table>
+        <thead>
+            <tr>
+                <th>Print</th>
+                <th>Radio</th>
+                <th>Digital</th>
+                <th>TV</th>
+                <th>OD</th>
+                <th>Act</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>${parseInt(amount * (distributionPercentages[0] / 100))}/-</td>
+                <td>${parseInt(amount * (distributionPercentages[1] / 100))}/-</td>
+                <td>${parseInt(amount * (distributionPercentages[2] / 100))}/-</td>
+                <td>${parseInt(amount * (distributionPercentages[3] / 100))}/-</td>
+                <td>${parseInt(amount * (distributionPercentages[4] / 100))}/-</td>
+                <td>${parseInt(amount * (distributionPercentages[5] / 100))}/-</td>
+            </tr>
+        </tbody>
+    </table>
+            `;
+
+
+            // Create a pie chart
+            createPieChart(amount, distributionPercentages);
+
+            // Inside calculateDistribution function
+            createBarChart(distributionPercentages);
+        }
+
+        function createPieChart(amount, distributionPercentages) {
+            const labels = ['Print', 'Radio', 'Digital', 'TV', 'OD', 'Act'];
+            const data = distributionPercentages.map(percentage => amount * (percentage / 100));
+
+            const pieChartCanvas = document.getElementById('pieChart');
+            const ctx = pieChartCanvas.getContext('2d');
+
+            const plugin = {
+                afterDatasetsDraw: function (chart) {
+                    const { ctx, chartArea } = chart;
+
+                    chart.data.datasets.forEach((dataset, i) => {
+                        const meta = chart.getDatasetMeta(i);
+                        if (!meta.hidden) {
+                            meta.data.forEach((element, index) => {
+                                const model = element._model;
+                                const total = dataset.data.reduce((prev, curr) => prev + curr, 0);
+                                const percentage = Math.round((dataset.data[index] / total) * 100) + '%';
+
+                                ctx.save();
+                                ctx.font = '14px Arial';
+                                ctx.fillStyle = 'black';
+                                ctx.textBaseline = 'middle';
+                                const pos = element.tooltipPosition();
+                                ctx.fillText(percentage, pos.x, pos.y);
+                                ctx.restore();
+                            });
+                        }
+                    });
+                }
+            };
+
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels,
+                    datasets: [{
+                        data,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(153, 102, 255, 0.7)',
+                            'rgba(255, 159, 64, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1,
+                        marginTop:'20px'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    title: {
+                        display: true,
+                        text: 'Channel Distribution'
+                    },
+                    plugins: {
+                        tooltip: {
+                            enabled: false
+                        }
+                    }
+                },
+                plugins: [plugin]
+            });
+        }
+
+
+        function createBarChart(distributionPercentages) {
+            const labels = ['Print', 'Radio', 'Digital', 'TV', 'OD', 'Act'];
+            const defaultPercentages = [40, 5, 30, 10, 5, 10];  // Default distribution percentages
+
+            const ctx = document.getElementById('lineChart').getContext('2d');
+            const barChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'User Input',
+                        data: distributionPercentages,
+                        backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                    }, {
+                        label: 'Default',
+                        data: defaultPercentages,
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        color: '#fffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    title: {
+                        display: true,
+                        text: 'Channel Distribution Comparison'
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Channels'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Percentage (%)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+
+
+    </script>
+
+</body>
+
+</html>
