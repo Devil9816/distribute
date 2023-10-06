@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Mukta&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    color: black;
+    /* overflow-x: hidden; */
+    /* Use min-height to ensure the container is at least the height of the viewport */
+}
+.container {
+    /* background: linear-gradient(purple,rgb(218, 3, 218)); */
+    /* padding: 20px; */
+    /* border-radius: 10px; */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* margin-left:10px; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.container-left{
+    /* background-color: #ffffff; */
+    /* color: white; */
+    padding: 20px;
+    /* border-radius: 10px; */
+    font-family: 'Mukta',sans-serif;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+    /* max-width: 500px; /* Set a maximum width for the container */
+     /*Make sure the container takes the full width within the max-width */
+    /* margin: auto; Center the container */ 
+}
+.container-center{
+    /* color: white; */
+    /* background-color: #ffffff; */
+    padding: 20px;
+    /* margin: 10px 0px; */
+    /* border-radius: 10px; */
+    display: none;
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+    text-align: center;
+    /* max-width: 500px; /* Set a maximum width for the container */
+     width: 80%; /*Make sure the container takes the full width within the max-width */
+    /* margin: auto; Center the container */ 
+}
+.container-right{
+    /* background-color: #ffffff; */
+    /* padding: 20px; */
+    /* border-radius: 10px; */
+    display: none;
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+    text-align: center;
+    /* max-width: 500px; /* Set a maximum width for the container */
+     width: 400px; /*Make sure the container takes the full width within the max-width */
+    /* margin: auto; Center the container */ 
+}
+
+
+.input-group {
+    margin-bottom: 15px; /* Adjusted margin for better spacing */
+    width: 70%;
+}
+
+label {
+    font-weight: bold;
+    display: block; /* Place labels on a new line for better alignment */
+    margin-bottom: 5px; /* Adjusted margin for better spacing */
+}
+
+input, select {
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-top: 5px;
+    margin-bottom: 10px; /* Adjusted margin for better spacing */
+}
+
+button {
+    padding: 12px 24px;
+    background-color: #007BFF;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Smooth hover transition */
+    margin-bottom: 15px; /* Adjusted margin for better spacing */
+}
+
+table{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th,td{
+    padding: 2px 5px;
+    width: 11.67%;
+    text-align: center;
+    border: 1px solid black;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.result {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 15px; /* Adjusted margin for better spacing */
+}
+
+.result-heading {
+    margin-top: 15px; /* Adjusted margin for better spacing */
+    font-size: 1.2em; /* Adjusted font size */
+    display: none;
+}
+
+/* Additional styles for the pie chart */
+#pieChart {
+    margin-top: 15px; /* Adjusted margin for better spacing */
+}
+
+/* Additional styles for the line chart */
+#lineChart {
+    margin-top: 15px; /* Adjusted margin for better spacing */
+}
