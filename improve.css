@@ -15,7 +15,7 @@ body {
     /* background: linear-gradient(purple,rgb(218, 3, 218)); */
     /* padding: 20px; */
     /* border-radius: 10px; */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
     /* margin-left:10px; */
     display: flex;
     flex-direction: column;
@@ -59,7 +59,7 @@ body {
     /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
     text-align: center;
     /* max-width: 500px; /* Set a maximum width for the container */
-     width: 400px; /*Make sure the container takes the full width within the max-width */
+     width: 80%; /*Make sure the container takes the full width within the max-width */
     /* margin: auto; Center the container */ 
 }
 
@@ -135,4 +135,10 @@ button:hover {
 /* Additional styles for the line chart */
 #lineChart {
     margin-top: 15px; /* Adjusted margin for better spacing */
+}
+
+@media (max-width:800px) {
+    .input-group{
+        width: 90%;
+    }   
 }
